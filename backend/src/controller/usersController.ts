@@ -79,6 +79,7 @@ const getUserByName = async (name: string) => {
 };
 
 const register = async (req: Request, res: Response, next: NextFunction) => {
+  console.log("Register");
   const { username, email, password } = req.body;
 
   try {
@@ -105,4 +106,36 @@ const register = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export default { getAllUsers, getUserByEmail, register };
+const login = async (req: Request, res: Response, next: NextFunction) => {
+  console.log("Login");
+  const { email, password } = req.body;
+
+  try {
+    const existingUser = (await getUserByEmail(email)) as any[];
+
+    if (existingUser.length === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const isPasswordCorrect = await bcrypt.compare(
+      password,
+      existingUser[0].user_password
+    );
+
+    if (!isPasswordCorrect) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
+
+    return res.status(200).json({
+      user: {
+        id: existingUser[0].user_id,
+        username: existingUser[0].user_name,
+        email: existingUser[0].user_email,
+      },
+    });
+  } catch (error: any) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export default { getAllUsers, getUserByEmail, register, login };

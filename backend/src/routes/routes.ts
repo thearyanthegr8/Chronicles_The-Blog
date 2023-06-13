@@ -9,4 +9,6 @@ router.get("/get/users", controller.getAllUsers);
 
 router.post("/register", controller.register);
 
+router.post("/login", controller.login);
+
 export = router;
