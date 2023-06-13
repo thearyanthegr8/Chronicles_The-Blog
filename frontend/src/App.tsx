@@ -1,12 +1,17 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+// import React, { useEffect } from "react";
+import "./App.css";
+// import axios from "axios";
 
 function App() {
+  // useEffect(() => {
+  //   axios.get("http://localhost:5000/api/get/users").then((res) => {
+  //     console.log(res.data);
+  //   });
+  // }, []);
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.tsx</code> and save to reload.
         </p>

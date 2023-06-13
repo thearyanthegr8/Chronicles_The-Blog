@@ -19,6 +19,7 @@ const Connect = async () =>
         return;
       }
 
+      console.log("Connected to MySQL database");
       resolve(connection);
     });
   });
