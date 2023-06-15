@@ -4,32 +4,27 @@ import bcrypt from "bcrypt";
 import userService from "../services/userService";
 
 const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
-  let query = "SELECT * FROM users";
+  console.log("Get all users");
+  return new Promise((resolve, reject) => {
+    let query = "SELECT * FROM users";
 
-  Connect()
-    .then((connection) => {
-      Query(connection, query)
-        .then((result) => {
-          return res.status(200).json({
-            result,
+    Connect()
+      .then((connection) => {
+        Query(connection, query)
+          .then((result) => {
+            resolve(result);
+          })
+          .catch((error) => {
+            reject(error);
+          })
+          .finally(() => {
+            connection.end();
           });
-        })
-        .catch((error) => {
-          return res.status(500).json({
-            message: error.message,
-            error,
-          });
-        })
-        .finally(() => {
-          connection.end();
-        });
-    })
-    .catch((error) => {
-      return res.status(500).json({
-        message: error.message,
-        error,
+      })
+      .catch((error) => {
+        reject(error);
       });
-    });
+  });
 };
 
 const getUserByEmail = async (email: string) => {

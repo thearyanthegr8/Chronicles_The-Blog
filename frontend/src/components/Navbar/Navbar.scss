@@ -1,0 +1,83 @@
+.Navbar {
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 5rem;
+  position: fixed;
+  padding: 0 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  backdrop-filter: blur(10px) saturate(180%);
+
+  &__left {
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+
+    &--logo {
+      font-size: 2rem;
+      font-family: "Bebas Neue", cursive;
+    }
+
+    &--links {
+      display: flex;
+      align-items: center;
+      font-family: "Poppins", sans-serif;
+      justify-content: space-between;
+      font-size: 1rem;
+      gap: 2rem;
+
+      &-link {
+        color: #000;
+        padding: 0 0.25rem;
+        display: flex;
+        align-items: center;
+        transition: color 0.5s ease-in-out, box-shadow 0.5s ease-in-out;
+        box-shadow: inset 0 0 0 0 #000;
+        position: relative;
+
+        sup {
+          font-size: 0.5rem;
+        }
+
+        &:hover {
+          color: #fff;
+          box-shadow: inset 200px 0 0 0 #000;
+        }
+      }
+
+      &-link:hover span {
+        transition: transform 0.15s ease-in-out;
+        transform: rotate(180deg);
+      }
+
+      &-link:not(:hover) span {
+        transition: transform 0.15s ease-in-out;
+        transform: rotate(0);
+      }
+    }
+  }
+
+  &__dropDownMenu {
+    position: absolute;
+    top: 1.5rem;
+    width: 100%;
+    left: 0rem;
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    border: 1px solid #e4e4e4;
+    color: #000;
+
+    &--link {
+      transition: all 0.3s ease-in-out;
+      padding: 1rem;
+
+      &:hover {
+        background-color: #000;
+        color: #fff;
+      }
+    }
+  }
+}
