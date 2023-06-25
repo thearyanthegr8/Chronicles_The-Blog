@@ -6,8 +6,6 @@ import { useNavigate } from "react-router-dom";
 import api from "../../hooks/AxiosApi";
 
 function Login() {
-  // const userProfile = UserProfile;
-
   const [passwordType, setPasswordType] = React.useState("password");
   const [indentificationInput, setIndentificationInput] = React.useState("");
   const [passwordInput, setPasswordInput] = React.useState("");
@@ -18,10 +16,6 @@ function Login() {
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPasswordInput(e.target.value);
   };
-
-  // useEffect(() => {
-  //   console.log(UserProfile.getName());
-  // }, []);
 
   const handleIndentificationChange = (
     e: React.ChangeEvent<HTMLInputElement>
@@ -49,7 +43,6 @@ function Login() {
       })
       .then((res) => {
         console.log("Successful Login", res.data);
-        // userProfile.setName(res.data.Name);
         setError("");
         Navigate("/");
       })
