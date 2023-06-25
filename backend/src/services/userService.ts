@@ -5,7 +5,7 @@ const userService = {
   create: (user: UserModel) => {
     // console.log("Create a new user");
     return new Promise((resolve, reject) => {
-      const query = `INSERT INTO users (user_name, user_email, user_password) VALUES ("${user.user_name}", "${user.user_email}", "${user.user_password}")`;
+      const query = `INSERT INTO users (Name, user_name, user_email, user_password) VALUES ("${user.Name}", "${user.user_name}", "${user.user_email}", "${user.user_password}")`;
       console.log(query);
       Connect().then((connection) => {
         Query(connection, query)

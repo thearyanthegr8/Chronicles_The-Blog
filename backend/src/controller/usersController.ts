@@ -75,29 +75,42 @@ const getUserByName = async (name: string) => {
 
 const register = async (req: Request, res: Response, next: NextFunction) => {
   console.log("Register");
-  const { username, email, password } = req.body;
+  const { name, username, email, password } = req.body;
 
-  try {
-    const existingUserEmail = (await getUserByEmail(email)) as any[];
-    const existingUserName = (await getUserByName(username)) as any[];
+  if (req.session?.authenticated) {
+    console.log("Already logged in");
+    return res.status(200).json(req.session);
+  } else {
+    try {
+      const existingUserEmail = (await getUserByEmail(email)) as any[];
+      const existingUserName = (await getUserByName(username)) as any[];
 
-    console.log("existingUser: ", existingUserEmail);
+      const existingUser = [] as any[];
 
-    if (existingUserEmail.length > 0 || existingUserName.length > 0) {
-      return res.status(400).json({ message: "User already exists" });
+      console.log("existingUser: ", existingUserEmail);
+
+      if (existingUserEmail.length > 0) {
+        existingUser.push(existingUserEmail[0]);
+        return res.status(400).json({ message: "User already exists" });
+      } else if (existingUserName.length > 0) {
+        existingUser.push(existingUserName[0]);
+        return res.status(400).json({ message: "Username already exists" });
+      }
+
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      const result = await userService.create({
+        Name: name,
+        user_email: email,
+        user_password: hashedPassword,
+        user_name: username,
+      });
+      console.log("New user created: ", result);
+      login(req, res, next);
+      // return res.status(200).json(result);
+    } catch (error: any) {
+      return res.status(500).json({ message: error.message });
     }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const result = await userService.create({
-      user_email: email,
-      user_password: hashedPassword,
-      user_name: username,
-    });
-    console.log("New user created: ", result);
-    return res.status(201).json({ result });
-  } catch (error: any) {
-    return res.status(500).json({ message: error.message });
   }
 };
 
@@ -174,4 +187,17 @@ const checkAuth = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export default { register, login, logout, checkAuth };
+const getLoggedUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  console.log("Get logged user");
+  if (req.session?.authenticated) {
+    return res.status(200).json(req.session.user);
+  } else {
+    return res.status(401).json({ message: "User not authenticated" });
+  }
+};
+
+export default { register, login, logout, checkAuth, getLoggedUser };

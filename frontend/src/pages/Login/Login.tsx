@@ -45,6 +45,7 @@ function Login() {
         console.log("Successful Login", res.data);
         setError("");
         Navigate("/");
+        window.location.reload();
       })
       .catch((err) => {
         console.log("Error", err.response.data.message);

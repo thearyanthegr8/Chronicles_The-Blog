@@ -16,6 +16,8 @@
     form {
       display: flex;
       flex-direction: column;
+      align-items: center;
+      width: fit-content;
       gap: 1.5rem;
     }
 
@@ -82,6 +84,7 @@
       justify-content: space-between;
       align-items: center;
       font-size: 0.9rem;
+      width: 22.5rem;
       font-family: "Poppins", sans-serif;
     }
 

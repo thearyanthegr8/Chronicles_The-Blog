@@ -20,7 +20,7 @@ app.use(
   session({
     path: "/",
     secret: "secret",
-    cookie: { maxAge: 100000 },
+    cookie: { maxAge: 3600000 },
     saveUninitialized: false,
     store,
   })
