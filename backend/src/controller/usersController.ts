@@ -104,33 +104,74 @@ const register = async (req: Request, res: Response, next: NextFunction) => {
 const login = async (req: Request, res: Response, next: NextFunction) => {
   console.log("Login");
   const { email, password } = req.body;
+  // console.log("req.session: ", req.session);
+  // console.log(req.session.authenticated);
 
-  try {
-    const existingUser = (await getUserByEmail(email)) as any[];
+  if (req.session?.authenticated) {
+    console.log("Already logged in");
+    return res.status(200).json(req.session);
+  } else {
+    try {
+      const existingUser = (await getUserByEmail(email)) as any[];
 
-    if (existingUser.length === 0) {
-      return res.status(404).json({ message: "User not found" });
+      if (existingUser.length === 0) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      const isPasswordCorrect = await bcrypt.compare(
+        password,
+        existingUser[0].user_password
+      );
+
+      if (!isPasswordCorrect) {
+        return res.status(400).json({ message: "Invalid credentials" });
+      }
+
+      return (
+        (req.session.authenticated = true),
+        (req.session.user = {
+          id: existingUser[0].user_id,
+          username: existingUser[0].user_name,
+          email: existingUser[0].user_email,
+          name: existingUser[0].Name,
+        }),
+        req.session.save(),
+        res.status(200).json({
+          user: {
+            id: existingUser[0].user_id,
+            username: existingUser[0].user_name,
+            email: existingUser[0].user_email,
+            name: existingUser[0].Name,
+          },
+        }),
+        console.log("Login successful"),
+        console.log(req.session.id)
+      );
+    } catch (error: any) {
+      return res.status(500).json({ message: error.message });
     }
-
-    const isPasswordCorrect = await bcrypt.compare(
-      password,
-      existingUser[0].user_password
-    );
-
-    if (!isPasswordCorrect) {
-      return res.status(400).json({ message: "Invalid credentials" });
-    }
-
-    return res.status(200).json({
-      user: {
-        id: existingUser[0].user_id,
-        username: existingUser[0].user_name,
-        email: existingUser[0].user_email,
-      },
-    });
-  } catch (error: any) {
-    return res.status(500).json({ message: error.message });
   }
 };
 
-export default { getAllUsers, getUserByEmail, register, login };
+const logout = async (req: Request, res: Response, next: NextFunction) => {
+  console.log("Logout");
+  req.session.destroy((err) => {
+    if (err) {
+      return res.status(500).json({ message: err.message });
+    } else {
+      return res.status(200).json({ message: "Logout successful" });
+    }
+  });
+};
+
+const checkAuth = async (req: Request, res: Response, next: NextFunction) => {
+  console.log("Check auth");
+  console.log(req.session.id);
+  if (req.session?.authenticated) {
+    return res.status(200).json({ message: "Authenticated" });
+  } else {
+    return res.status(401).json({ message: "User not authenticated" });
+  }
+};
+
+export default { register, login, logout, checkAuth };

@@ -46,6 +46,9 @@ const Navbar = () => {
           <Link to="/" className="Navbar__left--links-link">
             Talk to us
           </Link>
+          <Link to="/createBlog" className="Navbar__left--links-link">
+            Create Blog
+          </Link>
         </div>
       </div>
       <div className="Navbar__right">
