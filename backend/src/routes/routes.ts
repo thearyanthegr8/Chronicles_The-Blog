@@ -1,18 +1,23 @@
 import express from "express";
-import controller from "../controller/usersController";
+import userController from "../controller/usersController";
+import blogController from "../controller/blogController";
 import { validateCookies } from "../middlewares/auth";
 // import { auth } from "../middlewares/auth";
 
 const router = express.Router();
 
-router.post("/register", controller.register);
+router.post("/register", userController.register);
 
-router.post("/login", controller.login);
+router.post("/login", userController.login);
 
-router.get("/logout", controller.logout);
+router.get("/logout", userController.logout);
 
-router.get("/checkAuth", controller.checkAuth);
+router.get("/checkAuth", userController.checkAuth);
 
-router.get("/getUser", validateCookies, controller.getLoggedUser);
+router.get("/getUser", validateCookies, userController.getLoggedUser);
+
+router.post("/createBlog", blogController.createBlog);
+
+router.get("/getAllBlogs", blogController.getAllBlogs);
 
 export = router;
