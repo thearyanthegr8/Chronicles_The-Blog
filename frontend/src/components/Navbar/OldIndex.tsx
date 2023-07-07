@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Link } from "react-router-dom";
 import "./Navbar.scss";
 import Switch from "react-switch";
+import { useOnHoverOutside } from "../../hooks/useOnHoverOutside";
+import Menu from "./Menu";
 import { userContext } from "../../context/userContext";
 import Sidebar from "../Sidebar";
-import * as fontAwesomeIcons from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Navbar = () => {
   const [checked, setChecked] = React.useState(false);
@@ -14,7 +14,16 @@ const Navbar = () => {
     setChecked(!checked);
   };
 
+  const dropDownRef = useRef(null);
+  const [isMenuDropDownOpen, setMenuDropDownOpen] = React.useState(false);
+
   const [isSidebarOpen, setSidebarOpen] = React.useState(false);
+
+  const closeHoverMenu = () => {
+    setMenuDropDownOpen(false);
+  };
+
+  useOnHoverOutside(dropDownRef, closeHoverMenu);
 
   const value = React.useContext(userContext);
 
@@ -22,6 +31,9 @@ const Navbar = () => {
     <>
       <nav className="Navbar">
         <div className="Navbar__left">
+          <div className="Navbar__left--logo">
+            <Link to="/">Chronicles - The Blog</Link>
+          </div>
           <div className="Navbar__left--links">
             <Link to="/" className="Navbar__left--links-link">
               Articles<sup>(10)</sup>
@@ -29,13 +41,26 @@ const Navbar = () => {
             <Link to="/" className="Navbar__left--links-link">
               Podcast<sup>(5)</sup>
             </Link>
+            {value.user ? (
+              <></>
+            ) : (
+              <Link
+                to="/"
+                className="Navbar__left--links-link Navbar__left--links-dropDownArrow"
+                onMouseOver={() => setMenuDropDownOpen(true)}
+                ref={dropDownRef}
+              >
+                Be a writer <span data-icon={String.fromCharCode(58831)} />
+                {isMenuDropDownOpen && <Menu />}
+              </Link>
+            )}
             <Link to="/" className="Navbar__left--links-link">
               Talk to us
             </Link>
+            <Link to="/createBlog" className="Navbar__left--links-link">
+              Create Blog
+            </Link>
           </div>
-        </div>
-        <div className="Navbar__center">
-          <Link to="/">Chronicles</Link>
         </div>
         <div className="Navbar__right">
           <Switch
@@ -52,8 +77,8 @@ const Navbar = () => {
             onHandleColor="#000000"
           ></Switch>
           {value.user ? (
-            <>
-              <div className="Navbar__right--user">
+            <div className="Navbar__right--user">
+              {value.user ? (
                 <button
                   className="Navbar__right--user-button"
                   onClick={() => setSidebarOpen(true)}
@@ -63,28 +88,11 @@ const Navbar = () => {
                     alt="User avatar"
                   />
                 </button>
-              </div>
-              <Link to="/" className="Navbar__right--button">
-                <button>
-                  <FontAwesomeIcon
-                    icon={fontAwesomeIcons.faPenToSquare}
-                    className="Navbar__right--button-icon"
-                  />
-                  Write
-                </button>
-              </Link>
-            </>
-          ) : (
-            <Link to="/login" className="Navbar__right--button">
-              <button>
-                <FontAwesomeIcon
-                  icon={fontAwesomeIcons.faArrowRightToBracket}
-                  className="Navbar__right--button-icon"
-                />
-                Login
-              </button>
-            </Link>
-          )}
+              ) : (
+                <></>
+              )}
+            </div>
+          ) : null}
         </div>
       </nav>
       {isSidebarOpen ? (
