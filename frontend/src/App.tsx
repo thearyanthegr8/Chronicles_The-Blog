@@ -9,11 +9,12 @@ import { userContext } from "./context/userContext";
 import api from "./hooks/AxiosApi";
 import { User } from "./context/userContext";
 import Register from "./pages/Login/Register";
+import Blog from "./pages/Blog";
 
-class App extends React.Component<{}, { user: User | null }> {
+class App extends React.Component<{}, { user: User | null; blogs: [] }> {
   constructor(props: any) {
     super(props);
-    this.state = { user: null };
+    this.state = { user: null, blogs: [] };
   }
 
   componentDidMount(): void {
@@ -26,6 +27,16 @@ class App extends React.Component<{}, { user: User | null }> {
       .catch((err) => {
         console.log(err);
       });
+
+    api
+      .get("/getAllBlogs")
+      .then((res) => {
+        console.log(res.data);
+        this.setState({ blogs: res.data });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   render() {
@@ -34,10 +45,11 @@ class App extends React.Component<{}, { user: User | null }> {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Layout />}>
-              <Route index element={<Home />} />
+              <Route index element={<Home blogs={this.state.blogs} />} />
               <Route path="about" element={<About />} />
               <Route path="login" element={<Login />} />
               <Route path="register" element={<Register />} />
+              <Route path="blog/:id" element={<Blog />} />
               <Route path="*" element={<PageNotFound />} />
             </Route>
           </Routes>

@@ -1,15 +1,25 @@
 import { userContext } from "../../context/userContext";
 import React from "react";
 import "./Home.scss";
+import BlogCard from "../../components/BlogCard";
+import Navbar from "../../components/Navbar";
 
-const Home = () => {
-  const value = React.useContext(userContext);
+interface HomeProps {
+  blogs: [];
+}
+
+export default function Home(props: HomeProps) {
+  const blogs = props.blogs as [];
+
   return (
     <div className="HomePage">
-      <h1>Home</h1>
-      <p>{value ? value.user?.name : "No user"}</p>
+      {/* <hr className="HomePage__divider" /> */}
+      <h1 className="HomePage__title">Featured on Chronicles</h1>
+      <div className="HomePage__blogs">
+        {blogs.map((blog: any) => {
+          return <BlogCard data={blog} />;
+        })}
+      </div>
     </div>
   );
-};
-
-export default Home;
+}

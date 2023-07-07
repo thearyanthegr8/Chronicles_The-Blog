@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Syne:wght@500;700&display=swap");
 
 @font-face {
   font-family: "Icons";
@@ -9,7 +10,7 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    "Bebas Neue", "Poppins", sans-serif;
+    "Bebas Neue", "Poppins", "Syne", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -56,4 +57,23 @@ a {
     font: inherit;
     content: attr(data-icon);
   }
+}
+
+::-webkit-scrollbar {
+  width: 7.5px;
+  background-color: #000000;
+  // margin-right: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #000000;
+  border-radius: 50px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #fff;
+}
+
+::-webkit-scrollbar-corner {
+  background-color: #000000;
 }
